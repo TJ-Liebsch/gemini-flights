@@ -3,9 +3,14 @@ import streamlit as st
 from vertexai.preview import generative_models
 from vertexai.preview.generative_models import GenerativeModel, Tool, Part, Content, ChatSession
 from services.flight_manager import search_flights
+import toml
 
-project = "sample-gemini"
+with open("secrets.toml", "r") as s:
+    secrets = toml.load(s)
+
+project = secrets["google_cloud"]["project_id"]
 vertexai.init(project = project)
+
 
 # Define Tool
 get_search_flights = generative_models.FunctionDeclaration(
