@@ -41,9 +41,42 @@ get_search_flights = generative_models.FunctionDeclaration(
     },
 )
 
+# Define Tool
+post_book_flights = generative_models.FunctionDeclaration(
+    name="post_book_flights",
+    description="Tool for booking a flight with origin, destination, and departure date",
+    parameters={
+        "type": "object",
+        "properties": {
+            "passenger_name": {
+                "type": "string",
+                "description": "The passenger's name"
+            },
+            "origin": {
+                "type": "string",
+                "description": "The airport of departure for the flight given in airport code such as LAX, SFO, BOS, etc."
+            },
+            "destination": {
+                "type": "string",
+                "description": "The airport of destination for the flight given in airport code such as LAX, SFO, BOS, etc."
+            },
+            "departure_date": {
+                "type": "string",
+                "format": "date",
+                "description": "The date of departure for the flight in YYYY-MM-DD format"
+            }
+        },
+        "required": [
+            "origin",
+            "destination",
+            "departure_date"
+        ]
+    },
+)
+
 # Define tool and model with tools
 search_tool = generative_models.Tool(
-    function_declarations=[get_search_flights],
+    function_declarations=[get_search_flights, post_book_flights],
 )
 
 config = generative_models.GenerationConfig(temperature=0.4)

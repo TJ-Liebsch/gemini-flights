@@ -285,3 +285,40 @@ def search_flights(**params):
 
     # Returning the JSON response
     return response.json()
+
+def book_flight(**params):
+    """
+    Sends a POST request to a FastAPI endpoint to book flights based on various criteria.
+
+    Parameters:
+    - criteria (FlightSearchCriteria): An object containing the search criteria.
+
+    Returns:
+    The response from the FastAPI endpoint as a JSON object.
+    """
+    # Create an instace of FlightBookCriteria from the passed arguments
+    criteria = FlightSearchCriteria(**params)
+
+    # Define the endpoint for booking a flight
+    endpoint_url = f"http://127.0.0.1:8000//book_flight/?flight_number={criteria.flight_number}&seat_type={criteria.seat_type}&num_seats={criteria.num_seats}"
+    
+    # Create the request
+    payload = {
+        "passenger_name": criteria.passenger_name,
+        "origin": criteria.origin,
+        "destination": criteria.destination,
+        "departure_date": criteria.departure_date,
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN"
+    }
+
+    # Send the POST request to book the flight
+    response = requests.post(endpoint_url, json=payload, headers=headers)
+
+    # Check the response status
+    if response.status_code == 200:
+        return "Flight booked successfully!"
+    else:
+        return "Failed to book the flight. Please try again."
